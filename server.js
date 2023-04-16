@@ -6,6 +6,8 @@ const connectDB = require("./config/db");
 const errorHandler = require("./middleware/errorMiddleware");
 const listEndpoints = require("express-list-endpoints");
 const createHttpError = require("http-errors");
+const mongoose = require("mongoose");
+mongoose.set("strictQuery", true);
 
 const app = express();
 const port = process.env.PORT || 4000;
