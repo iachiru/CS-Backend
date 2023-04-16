@@ -7,7 +7,7 @@ const KitchenUser = require("../model/kitchenUserModel");
 //Route POST/
 //Access public
 
-const signUp = asyncHandler(async (req, res) => {
+/* const signUp = asyncHandler(async (req, res) => {
   const { name, password, email, host } = req.body;
 
   if (!name || !password || !email) {
@@ -49,7 +49,33 @@ const signUp = asyncHandler(async (req, res) => {
     throw new Error("Invalid user data");
   }
   res.json({ message: "User registered" });
-});
+}); */
+
+const signUp = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    const newUser = {
+      ...req.body,
+      password: hashedPassword,
+    };
+    const userExists = await KitchenUser.findOne({ email });
+    if (userExists) {
+      res.status(400);
+      throw new Error("Email already in use");
+    }
+
+    const createUser = await KitchenUser.create(newUser);
+    /* const newToken = generateToken(createUser._id);
+    const { token } = await createUser.save(newToken); */
+    res.status(201).send({ name: createUser.name, email: createUser.email });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const logIn = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
