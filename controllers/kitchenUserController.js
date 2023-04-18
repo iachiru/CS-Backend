@@ -42,7 +42,7 @@ const KitchenUser = require("../model/kitchenUserModel");
       name: user.name,
       email: user.email,
       host: user.host,
-      token: generateToken(user._id),
+      token: generateToken(user._id), Possibly only need to generate token here if i want to redirect to profile page
     });
   } else {
     res.status(400);
@@ -51,27 +51,36 @@ const KitchenUser = require("../model/kitchenUserModel");
   res.json({ message: "User registered" });
 }); */
 
+// User is being created even if there is an error.
 const signUp = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email } = req.body;
 
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
-    const newUser = {
-      ...req.body,
-      password: hashedPassword,
-    };
     const userExists = await KitchenUser.findOne({ email });
     if (userExists) {
       res.status(400);
       throw new Error("Email already in use");
     }
 
+    const newUser = {
+      ...req.body,
+      password: hashedPassword,
+    };
+
     const createUser = await KitchenUser.create(newUser);
-    /* const newToken = generateToken(createUser._id);
-    const { token } = await createUser.save(newToken); */
-    res.status(201).send({ name: createUser.name, email: createUser.email });
+    const newToken = generateToken(newUser._id);
+    const { token } = await createUser.save(newToken);
+
+    console.log(createUser);
+    console.log(token);
+    res.status(201).send({
+      name: createUser.name,
+      email: createUser.email,
+      token: createUser.token,
+    });
   } catch (error) {
     next(error);
   }
