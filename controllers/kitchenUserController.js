@@ -54,15 +54,16 @@ const KitchenUser = require("../model/kitchenUserModel");
 // User is being created even if there is an error.
 const signUp = async (req, res, next) => {
   try {
+    console.log("Checking test is calling function");
     const { email } = req.body;
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
 
     const userExists = await KitchenUser.findOne({ email });
+    console.log("checking method querying DB", userExists);
     if (userExists) {
-      res.status(400);
-      throw new Error("Email already in use");
+      res.status(400).send({ error: "Email already in use" });
     }
 
     const newUser = {
