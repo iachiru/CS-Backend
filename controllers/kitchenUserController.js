@@ -105,6 +105,28 @@ const logIn = asyncHandler(async (req, res) => {
   }
 });
 
+const editUser = async (req, res, next) => {
+  try {
+    const user = await KitchenUser.findById(req.params.userId);
+    console.log("user to edit", user);
+    if (!user) {
+      next(res.status(404).send(`User with id ${req.params.userId} not found`));
+    }
+    const updateUser = await KitchenUser.findByIdAndUpdate(
+      req.params.userId,
+
+      req.body,
+      {
+        new: true,
+      }
+    );
+
+    return res.status(200).json(updateUser);
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getMe = asyncHandler(async (req, res) => {
   const { name, email } = await KitchenUser.findById(req.user.id);
   return res.status(200).json({ name, email });
@@ -130,4 +152,4 @@ const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
-module.exports = { signUp, logIn, getMe, getAllUsers };
+module.exports = { signUp, logIn, getMe, editUser, getAllUsers };

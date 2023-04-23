@@ -3,6 +3,7 @@ const {
   signUp,
   logIn,
   getMe,
+  editUser,
   getAllUsers,
 } = require("../controllers/kitchenUserController");
 const {
@@ -19,6 +20,7 @@ router.get("/", getAllUsers);
 router.post("/register", signUp);
 router.post("/login", logIn);
 router.get("/profile", protect, getMe);
+router.put("/:userId", protect, editUser);
 
 router.get("/:userId/kitchen/:kitchenId", getOneKitchen);
 router.get("/:userId/kitchen", getKitchensByUser);
