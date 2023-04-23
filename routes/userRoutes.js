@@ -5,6 +5,7 @@ const {
   getMe,
   editUser,
   getAllUsers,
+  deleteUser,
 } = require("../controllers/kitchenUserController");
 const {
   getOneKitchen,
@@ -21,6 +22,7 @@ router.post("/register", signUp);
 router.post("/login", logIn);
 router.get("/profile", protect, getMe);
 router.put("/:userId", protect, editUser);
+router.delete("/:userId", protect, deleteUser);
 
 router.get("/:userId/kitchen/:kitchenId", getOneKitchen);
 router.get("/:userId/kitchen", getKitchensByUser);

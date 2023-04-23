@@ -112,14 +112,22 @@ const editUser = async (req, res, next) => {
     if (!user) {
       next(res.status(404).send(`User with id ${req.params.userId} not found`));
     }
-    const updateUser = await KitchenUser.findByIdAndUpdate(
-      req.params.userId,
 
-      req.body,
-      {
-        new: true,
+    Object.keys(req.body).forEach((key) => {
+      if (key !== "password") {
+        user[key] = req.body[key];
       }
-    );
+    });
+
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(req.body.password, salt);
+      console.log("hashed pass", hashedPassword);
+      if (hashedPassword !== user.password) {
+        user.password = hashedPassword;
+      }
+    }
+    const updateUser = await user.save();
 
     return res.status(200).json(updateUser);
   } catch (error) {
@@ -148,8 +156,23 @@ const getAllUsers = async (req, res, next) => {
   }
 };
 
+const deleteUser = async (req, res, next) => {
+  try {
+    const user = await KitchenUser.findById(req.params.userId);
+    if (!user) {
+      next(res.status(404).send(`User with id ${req.params.userId} not found`));
+    }
+
+    const userToDelete = await KitchenUser.findByIdAndDelete(req.params.userId);
+
+    res.status(204).send("User has been deleted");
+  } catch (error) {
+    next(error);
+  }
+};
+
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
-module.exports = { signUp, logIn, getMe, editUser, getAllUsers };
+module.exports = { signUp, logIn, getMe, editUser, getAllUsers, deleteUser };
