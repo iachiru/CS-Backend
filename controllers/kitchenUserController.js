@@ -89,8 +89,20 @@ const signUp = async (req, res, next) => {
 
 const logIn = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
+
   const user = await KitchenUser.findOne({ email });
+
+  if (!user) {
+    res.status(404);
+    throw new Error("Email is incorrect, please try again");
+  }
+
   const passwordCompare = await bcrypt.compare(password, user.password);
+
+  if (!passwordCompare) {
+    res.status(400);
+    throw new Error("Password is incorrect, please try again");
+  }
 
   if (user && passwordCompare) {
     res.status(200).json({
@@ -99,6 +111,7 @@ const logIn = asyncHandler(async (req, res) => {
       email: user.email,
       token: generateToken(user._id),
     });
+    console.log(user);
   } else {
     res.status(400);
     throw new Error("Invalid credentials, please try again");
@@ -145,7 +158,7 @@ const getMe = asyncHandler(async (req, res) => {
 const getAllUsers = async (req, res, next) => {
   try {
     const users = await KitchenUser.find();
-    console.log("These are the users", users);
+
     if (!users) {
       res
         .status(400)
