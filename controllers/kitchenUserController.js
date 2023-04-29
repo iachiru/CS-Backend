@@ -110,6 +110,7 @@ const logIn = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       token: generateToken(user._id),
+      kitchen: user.kitchen,
     });
     console.log(user);
   } else {
@@ -152,6 +153,7 @@ const getMe = asyncHandler(async (req, res) => {
   const { name, email, kitchen, host } = await KitchenUser.findById(
     req.user.id
   );
+
   return res.status(200).json({ name, email, kitchen, host });
 });
 
