@@ -36,7 +36,7 @@ const getKitchensByUser = async (req, res, next) => {
     const userId = req.params.userId;
     const kitchenByUser = await KitchenUser.findById(userId).populate({
       path: "kitchen",
-      select: "image description kitchenType",
+      select: "image ref price description kitchenType",
     });
 
     if (!kitchenByUser) {
