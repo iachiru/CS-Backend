@@ -8,6 +8,13 @@ const listEndpoints = require("express-list-endpoints");
 const createHttpError = require("http-errors");
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", true);
+const cloudinary = require("cloudinary").v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_SECRET,
+  secure: true,
+});
 
 const app = express();
 const port = process.env.PORT || 4000;
