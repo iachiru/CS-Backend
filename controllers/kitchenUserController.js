@@ -73,14 +73,14 @@ const signUp = async (req, res, next) => {
 
     const createUser = await KitchenUser.create(newUser);
     const newToken = generateToken(newUser._id);
-    const { token } = await createUser.save(newToken);
+    /* const { token } = await createUser.save(newToken); */
 
     console.log(createUser);
-    console.log(token);
+    console.log("This is the token", newToken);
     res.status(201).send({
       name: createUser.name,
       email: createUser.email,
-      token: createUser.token,
+      token: newToken,
     });
   } catch (error) {
     next(error);
@@ -109,8 +109,13 @@ const logIn = asyncHandler(async (req, res) => {
       _id: user.id,
       name: user.name,
       email: user.email,
+      /*  address: user.address, */
+      /*   companyName: user.companyName,
+      companyAddress: user.companyAddress,
+      companyType: user.companyType, */
       token: generateToken(user._id),
       kitchen: user.kitchen,
+      /* hostType: user.hostType, */
     });
     console.log(user);
   } else {
@@ -150,11 +155,29 @@ const editUser = async (req, res, next) => {
 };
 
 const getMe = asyncHandler(async (req, res) => {
-  const { name, email, kitchen, host } = await KitchenUser.findById(
-    req.user.id
-  );
+  const {
+    name,
+    email,
+    address,
+    companyName,
+    companyAddress,
+    companyType,
+    kitchen,
+    host,
+    hostType,
+  } = await KitchenUser.findById(req.user.id);
 
-  return res.status(200).json({ name, email, kitchen, host });
+  return res.status(200).json({
+    name,
+    email,
+    address,
+    companyName,
+    companyAddress,
+    companyType,
+    kitchen,
+    host,
+    hostType,
+  });
 });
 
 const getAllUsers = async (req, res, next) => {

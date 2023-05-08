@@ -15,11 +15,26 @@ const kitchenUserSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
+    address: {
+      type: String,
+    },
+    companyName: {
+      type: String,
+    },
+    companyAddress: {
+      type: String,
+    },
+    companyType: {
+      type: String,
+    },
     kitchen: {
       type: [mongoose.Schema.Types.ObjectId],
       ref: "Kitchen",
     },
     host: { type: Boolean },
+    hostType: {
+      type: String,
+    },
   },
   { timestamps: true }
 );

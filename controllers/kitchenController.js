@@ -36,7 +36,7 @@ const getKitchensByUser = async (req, res, next) => {
     const userId = req.params.userId;
     const kitchenByUser = await KitchenUser.findById(userId).populate({
       path: "kitchen",
-      select: "image ref price description kitchenType",
+      select: "image ref price description kitchenType address",
     });
 
     if (!kitchenByUser) {
@@ -125,6 +125,7 @@ const postNewKitchen = async (req, res, next) => {
         $push: { kitchen: _id },
       }
     );
+    console.log("kitchen created", newKitchen);
     res
       .status(201)
       .send({ createdKitchen: newKitchen, kitchenIdAdded: addToUser });
@@ -169,7 +170,7 @@ const editKitchen = asyncHandler(async (req, res) => {
       new: true,
     }
   );
-
+  console.log("edit kitchen is called", updateKitchen);
   return res.status(200).json(updateKitchen);
 });
 
