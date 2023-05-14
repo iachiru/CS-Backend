@@ -211,8 +211,37 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
+const uploadUserPics = async (res, req, next) => {
+  try {
+    console.log("function called on backend");
+    const profilePic = await KitchenUser.findByIdAndUpdate(
+      req.user._id,
+      {
+        ...req.body,
+        userImage: req.file.path,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    res.send({ profilePic });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };
 
-module.exports = { signUp, logIn, getMe, editUser, getAllUsers, deleteUser };
+module.exports = {
+  signUp,
+  logIn,
+  getMe,
+  editUser,
+  getAllUsers,
+  deleteUser,
+  uploadUserPics,
+};

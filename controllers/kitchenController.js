@@ -235,6 +235,26 @@ const getKitchen = async (req, res, next) => {
   }
 };
 
+/* const uploadPics = async (res, req, next) => {
+  try {
+    const kitchenToUpload = await Kitchen.findByIdAndUpdate(
+      req.user._id,
+      {
+        ...req.body,
+        image: req.file.path,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
+    res.send({ kitchenToUpload });
+  } catch (error) {
+    next(error);
+  }
+}; */
+
 module.exports = {
   getKitchensByUser,
   getOneKitchen,
