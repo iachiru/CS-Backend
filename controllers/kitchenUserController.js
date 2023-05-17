@@ -158,6 +158,7 @@ const getMe = asyncHandler(async (req, res) => {
   const {
     name,
     email,
+    userImage,
     address,
     companyName,
     companyAddress,
@@ -170,6 +171,7 @@ const getMe = asyncHandler(async (req, res) => {
   return res.status(200).json({
     name,
     email,
+    userImage,
     address,
     companyName,
     companyAddress,
@@ -218,19 +220,23 @@ const uploadUserPics = async (res, req, next) => {
       req.user._id,
       {
         ...req.body,
-        userImage: req.file.path,
+        image: req.file.path,
       },
       {
         new: true,
         runValidators: true,
       }
     );
-
+    console.log("this is the avatar");
     res.send({ profilePic });
   } catch (error) {
     next(error);
   }
 };
+
+/* const testPic = async (res, req, next) => {
+  console.log("endpoint reached", req.file.path);
+}; */
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });

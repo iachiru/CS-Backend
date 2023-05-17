@@ -15,8 +15,9 @@ const kitchenUserSchema = mongoose.Schema(
       required: true,
       unique: true,
     },
-    userImage: {
+    image: {
       type: String,
+      default: "asdasd",
     },
     address: {
       type: String,
