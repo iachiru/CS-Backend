@@ -33,7 +33,6 @@ const corsOptions = {
       );
     }
   },
-  allowedHeaders: "Content-Type",
 };
 
 connectDB();

@@ -10,6 +10,7 @@ const kitchenUserSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+
     email: {
       type: String,
       required: true,
@@ -17,19 +18,24 @@ const kitchenUserSchema = mongoose.Schema(
     },
     image: {
       type: String,
-      default: "asdasd",
+      default:
+        "https://cdn1.iconfinder.com/data/icons/user-pictures/100/unknown-512.png",
     },
     address: {
       type: String,
+      default: "Please provide an address",
     },
     companyName: {
       type: String,
+      default: "Please provide your company's name",
     },
     companyAddress: {
       type: String,
+      default: "Please provide your company's address",
     },
     companyType: {
       type: String,
+      default: "Please provide the type of company",
     },
     kitchen: {
       type: [mongoose.Schema.Types.ObjectId],
@@ -38,6 +44,7 @@ const kitchenUserSchema = mongoose.Schema(
     host: { type: Boolean },
     hostType: {
       type: String,
+      default: "Please select:",
     },
   },
   { timestamps: true }

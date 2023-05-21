@@ -73,14 +73,19 @@ const signUp = async (req, res, next) => {
 
     const createUser = await KitchenUser.create(newUser);
     const newToken = generateToken(newUser._id);
-    /* const { token } = await createUser.save(newToken); */
-
-    console.log(createUser);
-    console.log("This is the token", newToken);
+    const { token } = await createUser.save(newToken);
+    console.log("this is cU", createUser);
+    console.log("this is the token", token, "this is newToken", newToken);
     res.status(201).send({
       name: createUser.name,
       email: createUser.email,
       token: newToken,
+      image: createUser.image || null,
+      address: createUser.address || null,
+      companyName: createUser.companyName || null,
+      companyAddress: createUser.companyAddress || null,
+      companyType: createUser.companyType || null,
+      hostType: createUser.hostType || null,
     });
   } catch (error) {
     next(error);
@@ -126,6 +131,7 @@ const logIn = asyncHandler(async (req, res) => {
 
 const editUser = async (req, res, next) => {
   try {
+    console.log("called on BE");
     const user = await KitchenUser.findById(req.params.userId);
 
     if (!user) {
