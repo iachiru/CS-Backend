@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const kitchenSchema = mongoose.Schema(
   {
-    image: { type: String },
+    images: { type: [String] },
     ref: { type: String },
     price: { type: String, required: true },
     description: { type: String, required: true },

@@ -37,7 +37,7 @@ router.post("/login", logIn);
 router.get("/profile", protect, getMe);
 router.put("/:userId", protect, editUser);
 router.delete("/:userId", protect, deleteUser);
-router.post("/avatar", cloudinaryUploader, uploadUserPics);
+router.post("/:userId/avatar", cloudinaryUploader, protect, uploadUserPics);
 /*  const { image } = req.body;
 
   const uploadedImage = await cloudinary.uploader.upload(

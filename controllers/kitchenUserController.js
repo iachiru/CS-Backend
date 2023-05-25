@@ -54,7 +54,6 @@ const KitchenUser = require("../model/kitchenUserModel");
 // User is being created even if there is an error.
 const signUp = async (req, res, next) => {
   try {
-    console.log("Checking test is calling function");
     const { email } = req.body;
 
     const salt = await bcrypt.genSalt(10);
@@ -74,18 +73,17 @@ const signUp = async (req, res, next) => {
     const createUser = await KitchenUser.create(newUser);
     const newToken = generateToken(newUser._id);
     const { token } = await createUser.save(newToken);
-    console.log("this is cU", createUser);
-    console.log("this is the token", token, "this is newToken", newToken);
+
     res.status(201).send({
       name: createUser.name,
       email: createUser.email,
       token: newToken,
-      image: createUser.image || null,
-      address: createUser.address || null,
-      companyName: createUser.companyName || null,
-      companyAddress: createUser.companyAddress || null,
-      companyType: createUser.companyType || null,
-      hostType: createUser.hostType || null,
+      image: createUser.image,
+      address: createUser.address,
+      companyName: createUser.companyName,
+      companyAddress: createUser.companyAddress,
+      companyType: createUser.companyType,
+      hostType: createUser.hostType,
     });
   } catch (error) {
     next(error);
@@ -114,15 +112,15 @@ const logIn = asyncHandler(async (req, res) => {
       _id: user.id,
       name: user.name,
       email: user.email,
-      /*  address: user.address, */
-      /*   companyName: user.companyName,
+      image: user.image,
+      address: user.address,
+      companyName: user.companyName,
       companyAddress: user.companyAddress,
-      companyType: user.companyType, */
+      companyType: user.companyType,
       token: generateToken(user._id),
       kitchen: user.kitchen,
-      /* hostType: user.hostType, */
+      hostType: user.hostType,
     });
-    console.log(user);
   } else {
     res.status(400);
     throw new Error("Invalid credentials, please try again");
@@ -164,7 +162,7 @@ const getMe = asyncHandler(async (req, res) => {
   const {
     name,
     email,
-    userImage,
+    image,
     address,
     companyName,
     companyAddress,
@@ -177,7 +175,7 @@ const getMe = asyncHandler(async (req, res) => {
   return res.status(200).json({
     name,
     email,
-    userImage,
+    image,
     address,
     companyName,
     companyAddress,
@@ -219,11 +217,10 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-const uploadUserPics = async (res, req, next) => {
+const uploadUserPics = async (req, res, next) => {
   try {
-    console.log("function called on backend");
-    const profilePic = await KitchenUser.findByIdAndUpdate(
-      req.user._id,
+    const avatar = await KitchenUser.findByIdAndUpdate(
+      req.params.userId,
       {
         ...req.body,
         image: req.file.path,
@@ -233,8 +230,8 @@ const uploadUserPics = async (res, req, next) => {
         runValidators: true,
       }
     );
-    console.log("this is the avatar");
-    res.send({ profilePic });
+    console.log("this is the avatar", avatar);
+    res.send({ avatar });
   } catch (error) {
     next(error);
   }

@@ -235,13 +235,13 @@ const getKitchen = async (req, res, next) => {
   }
 };
 
-/* const uploadPics = async (res, req, next) => {
+const uploadPics = async (res, req, next) => {
   try {
-    const kitchenToUpload = await Kitchen.findByIdAndUpdate(
-      req.user._id,
+    const images = await Kitchen.findByIdAndUpdate(
+      req.params.kitchenId,
       {
         ...req.body,
-        image: req.file.path,
+        images: req.files.path,
       },
       {
         new: true,
@@ -249,11 +249,11 @@ const getKitchen = async (req, res, next) => {
       }
     );
 
-    res.send({ kitchenToUpload });
+    res.send({ images });
   } catch (error) {
     next(error);
   }
-}; */
+};
 
 module.exports = {
   getKitchensByUser,
@@ -263,4 +263,5 @@ module.exports = {
   deleteKitchen,
   getKitchen,
   getAllKitchens,
+  uploadPics,
 };
