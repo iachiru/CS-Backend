@@ -235,20 +235,22 @@ const getKitchen = async (req, res, next) => {
   }
 };
 
-const uploadPics = async (res, req, next) => {
+const uploadPics = async (req, res, next) => {
   try {
+    console.log("EP touched");
+
+    const imagePaths = req.files.map((file) => file.path);
     const images = await Kitchen.findByIdAndUpdate(
-      req.params.kitchenId,
+      { _id: req.params.kitchenId },
       {
-        ...req.body,
-        images: req.files.path,
+        $push: { images: imagePaths },
       },
       {
         new: true,
         runValidators: true,
       }
     );
-
+    console.log("req.files.path", imagePaths);
     res.send({ images });
   } catch (error) {
     next(error);

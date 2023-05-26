@@ -230,7 +230,7 @@ const uploadUserPics = async (req, res, next) => {
         runValidators: true,
       }
     );
-    console.log("this is the avatar", avatar);
+    console.log("req.file.path", req.file.path);
     res.send({ avatar });
   } catch (error) {
     next(error);

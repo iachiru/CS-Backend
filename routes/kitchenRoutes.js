@@ -15,14 +15,15 @@ const cloudinaryUploader = multer({
     cloudinary,
     params: {
       folder: `kitchenPics`,
+      allowed_formats: ["jpg", "jpeg", "png"],
     },
   }),
-}).array("files");
+}).array("images");
 
 router.get("/kitchens", getAllKitchens);
 router.get("/:kitchenRef", getKitchen);
-router.post(
-  "/:kitchenId/kitchen-pics",
+router.put(
+  "/:userId/kitchen-pics/:kitchenId",
   protect,
   cloudinaryUploader,
   uploadPics
