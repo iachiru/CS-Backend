@@ -36,7 +36,7 @@ const getKitchensByUser = async (req, res, next) => {
     const userId = req.params.userId;
     const kitchenByUser = await KitchenUser.findById(userId).populate({
       path: "kitchen",
-      select: "image ref price description kitchenType address",
+      select: "images ref price description kitchenType address",
     });
 
     if (!kitchenByUser) {
@@ -108,8 +108,20 @@ const postNewKitchen = async (req, res, next) => {
     if (!user) {
       next(res.status(404).send(`User with id ${req.params.userId} not found`));
     }
+    console.log("Call on BE");
+    console.log(req.files);
+    const images = req.body.images;
+    console.log("images files", images);
 
-    const kitchenToAdd = { ...req.body, ref: ref, user: req.params.userId };
+    const imagePaths = images.req.files.map((file) => file.path);
+    console.log("this are the imagePaths", imagePaths);
+    const kitchenToAdd = {
+      ...req.body.data,
+      ref: ref,
+      user: req.params.userId,
+      images: imagePaths,
+    };
+
     const kitchenExists = await Kitchen.findOne({ ref });
     if (kitchenExists) {
       res.status(400);
@@ -117,6 +129,7 @@ const postNewKitchen = async (req, res, next) => {
     }
     const newKitchen = await Kitchen.create(kitchenToAdd);
     const { _id } = await newKitchen.save(); //save is deprecated try change for insertOne
+
     const addToUser = await KitchenUser.findByIdAndUpdate(
       {
         _id: req.params.userId,
@@ -170,7 +183,7 @@ const editKitchen = asyncHandler(async (req, res) => {
       new: true,
     }
   );
-  console.log("edit kitchen is called", updateKitchen);
+
   return res.status(200).json(updateKitchen);
 });
 
@@ -250,7 +263,7 @@ const uploadPics = async (req, res, next) => {
         runValidators: true,
       }
     );
-    console.log("req.files.path", imagePaths);
+
     res.send({ images });
   } catch (error) {
     next(error);
