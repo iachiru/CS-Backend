@@ -3,6 +3,7 @@ const Kitchen = require("../model/kitchenModel");
 const KitchenUser = require("../model/kitchenUserModel");
 const ShortUniqueId = require("short-unique-id");
 const createHttpError = require("http-errors");
+const { Children } = require("react");
 
 const uid = new ShortUniqueId({ dictionary: "number", length: 5 });
 
@@ -108,18 +109,11 @@ const postNewKitchen = async (req, res, next) => {
     if (!user) {
       next(res.status(404).send(`User with id ${req.params.userId} not found`));
     }
-    console.log("Call on BE");
-    console.log(req.files);
-    const images = req.body.images;
-    console.log("images files", images);
 
-    const imagePaths = images.req.files.map((file) => file.path);
-    console.log("this are the imagePaths", imagePaths);
     const kitchenToAdd = {
-      ...req.body.data,
+      ...req.body,
       ref: ref,
       user: req.params.userId,
-      images: imagePaths,
     };
 
     const kitchenExists = await Kitchen.findOne({ ref });
@@ -128,6 +122,7 @@ const postNewKitchen = async (req, res, next) => {
       throw new Error("Oops something went wrong, please try again");
     }
     const newKitchen = await Kitchen.create(kitchenToAdd);
+
     const { _id } = await newKitchen.save(); //save is deprecated try change for insertOne
 
     const addToUser = await KitchenUser.findByIdAndUpdate(
@@ -250,8 +245,6 @@ const getKitchen = async (req, res, next) => {
 
 const uploadPics = async (req, res, next) => {
   try {
-    console.log("EP touched");
-
     const imagePaths = req.files.map((file) => file.path);
     const images = await Kitchen.findByIdAndUpdate(
       { _id: req.params.kitchenId },

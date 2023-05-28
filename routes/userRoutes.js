@@ -31,16 +31,6 @@ const cloudinaryUploader = multer({
   }),
 }).single("image");
 
-const cloudinaryUploaderKitchen = multer({
-  storage: new CloudinaryStorage({
-    cloudinary,
-    params: {
-      folder: `kitchenCreatePics`,
-      allowed_formats: ["jpg", "jpeg", "png"],
-    },
-  }),
-}).array("images");
-
 router.get("/", getAllUsers);
 router.post("/register", signUp);
 router.post("/login", logIn);
@@ -51,12 +41,7 @@ router.post("/:userId/avatar", protect, cloudinaryUploader, uploadUserPics);
 
 router.get("/:userId/kitchen/:kitchenId", getOneKitchen);
 router.get("/:userId/kitchen", getKitchensByUser);
-router.post(
-  "/:userId/kitchen",
-  protect,
-  cloudinaryUploaderKitchen,
-  postNewKitchen
-);
+router.post("/:userId/kitchen", protect, postNewKitchen);
 router.put("/:userId/kitchen/:kitchenId", protect, editKitchen);
 router.delete("/:userId/kitchen/:kitchenId", protect, deleteKitchen);
 
