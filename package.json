@@ -6,8 +6,8 @@
   "scripts": {
     "test": "jest",
     "start": "node server.js",
-    "server": "nodemon backend/server.js",
-    "client": "npm start --prefix frontend"
+    "server": "nodemon backend/server.js"
+    
   },
   "repository": {
     "type": "git",
