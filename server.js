@@ -7,7 +7,7 @@ const errorHandler = require("./middleware/errorMiddleware");
 const listEndpoints = require("express-list-endpoints");
 const createHttpError = require("http-errors");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
+
 mongoose.set("strictQuery", true);
 const cloudinary = require("cloudinary").v2;
 cloudinary.config({
