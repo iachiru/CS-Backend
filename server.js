@@ -42,10 +42,6 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(cors(corsOptions));
 
-app.get("/getData", (req, res) => {
-  res.send("Front and Back connected");
-});
-
 app.use("/api/users", require("./routes/userRoutes"));
 app.use("/api/users", require("./routes/kitchenRoutes"));
 
