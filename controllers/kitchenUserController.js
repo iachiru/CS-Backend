@@ -237,10 +237,6 @@ const uploadUserPics = async (req, res, next) => {
   }
 };
 
-/* const testPic = async (res, req, next) => {
-  console.log("endpoint reached", req.file.path);
-}; */
-
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 };

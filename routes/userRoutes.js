@@ -35,14 +35,18 @@ router.get("/", getAllUsers);
 router.post("/register", signUp);
 router.post("/login", logIn);
 router.get("/profile", protect, getMe);
-router.put("/:userId", protect, editUser);
-router.delete("/:userId", protect, deleteUser);
+router.route("/:userId").put(protect, editUser).delete(protect, deleteUser);
 router.post("/:userId/avatar", protect, cloudinaryUploader, uploadUserPics);
 
-router.get("/:userId/kitchen/:kitchenId", getOneKitchen);
-router.get("/:userId/kitchen", getKitchensByUser);
-router.post("/:userId/kitchen", protect, postNewKitchen);
-router.put("/:userId/kitchen/:kitchenId", protect, editKitchen);
-router.delete("/:userId/kitchen/:kitchenId", protect, deleteKitchen);
+router
+  .route("/:userId/kitchen")
+  .get(getKitchensByUser)
+  .post(protect, postNewKitchen);
+
+router
+  .route("/:userId/kitchen/:kitchenId")
+  .get(getOneKitchen)
+  .put(protect, editKitchen)
+  .delete(protect, deleteKitchen);
 
 module.exports = router;

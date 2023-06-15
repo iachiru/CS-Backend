@@ -2,7 +2,10 @@ const mongoose = require("mongoose");
 
 const kitchenSchema = mongoose.Schema(
   {
-    images: { type: [String] },
+    images: {
+      type: [String],
+      default: `https://upload.wikimedia.org/wikipedia/commons/3/3f/Placeholder_view_vector.svg`,
+    },
     ref: { type: String },
     price: { type: String, required: true },
     description: { type: String, required: true },
